@@ -1,0 +1,6 @@
+.env
+.venv/
+# Holds uploaded reels, voice samples, voice embeddings and dubbed videos.
+runs/
+__pycache__/
+.pytest_cache/

@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reel Dubber</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #f8f6f1;
+    --panel: #ffffff;
+    --ink: #1c1a16;
+    --muted: #68635a;
+    --line: #e0dbcf;
+    --accent: #a8430f;
+    --accent-ink: #ffffff;
+    --accent-soft: #f7e6da;
+    --good: #0f5f4a;
+    --good-bg: #e2f1ea;
+    --warn: #7c4f08;
+    --warn-bg: #f8ecd2;
+    --bad: #a3241b;
+    --bad-bg: #f9e4e1;
+    --open: #4c4a44;
+    --open-bg: #ecebe5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #151411;
+      --panel: #1f1d19;
+      --ink: #efece4;
+      --muted: #a9a59a;
+      --line: #37342d;
+      --accent: #f2a56b;
+      --accent-ink: #231206;
+      --accent-soft: #3a2415;
+      --good: #7dd8b9;
+      --good-bg: #17352b;
+      --warn: #eec373;
+      --warn-bg: #3a2c12;
+      --bad: #f3a097;
+      --bad-bg: #40201c;
+      --open: #c9c6bc;
+      --open-bg: #2c2b26;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 16px/1.5 system-ui, "Segoe UI", "Nirmala UI", "Noto Sans", sans-serif;
+  }
+  main { max-width: 1120px; margin: 0 auto; padding: 28px 16px 72px; }
+  h1 { font-size: 1.75rem; line-height: 1.2; margin: 0; letter-spacing: -0.01em; }
+  h2 { font-size: 1.125rem; line-height: 1.3; margin: 0; }
+  h3 { font-size: .95rem; line-height: 1.3; margin: 0; }
+  p { margin: 0; }
+  .muted { color: var(--muted); }
+  .small { font-size: .875rem; }
+  .tagline { margin-top: 2px; }
+  .notice { margin-top: 14px; padding: 10px 14px; border-radius: 8px; font-size: .9rem; }
+  .layout { display: grid; grid-template-columns: minmax(300px, 380px) minmax(0, 1fr); gap: 16px; align-items: start; margin-top: 20px; }
+  @media (max-width: 860px) { .layout { grid-template-columns: minmax(0, 1fr); } }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
+  .panel + .panel { margin-top: 16px; }
+  #form > * + * { margin-top: 16px; }
+  fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+  legend, .label { display: block; font-size: .875rem; font-weight: 600; padding: 0; margin-bottom: 6px; }
+  input[type=text], input[type=number], select, textarea {
+    width: 100%; font: inherit; color: var(--ink); background: var(--bg);
+    border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; min-height: 40px;
+  }
+  textarea { resize: vertical; line-height: 1.5; }
+  input[type=file] { width: 100%; font: inherit; font-size: .875rem; }
+  input[type=range] { width: 100%; }
+  button, .button {
+    display: inline-flex; align-items: center; justify-content: center;
+    font: inherit; font-size: .9rem; min-height: 40px; padding: 7px 14px; border-radius: 8px;
+    border: 1px solid var(--line); background: var(--panel); color: var(--ink); cursor: pointer; text-decoration: none;
+  }
+  button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
+  button:disabled { opacity: .55; cursor: not-allowed; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .choices { display: flex; flex-wrap: wrap; gap: 6px; }
+  .choice { position: relative; }
+  .choice input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .choice span { display: flex; align-items: center; min-height: 36px; padding: 5px 11px; border: 1px solid var(--line); border-radius: 8px; font-size: .9rem; cursor: pointer; }
+  .choice input:checked + span { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .choice input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .check { display: flex; gap: 8px; align-items: flex-start; font-size: .9rem; }
+  .check input { margin-top: 4px; }
+  .stack > * + * { margin-top: 10px; }
+  .error { color: var(--bad); font-size: .9rem; overflow-wrap: anywhere; }
+
+  .jobs { list-style: none; margin: 8px 0 0; padding: 0; }
+  .jobs li + li { margin-top: 4px; }
+  .jobs button { width: 100%; justify-content: space-between; gap: 8px; text-align: left; }
+  .jobs button.current { border-color: var(--accent); }
+  .jobs .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .empty { text-align: center; padding: 56px 20px; }
+  .job-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+  .progress { margin-top: 12px; padding: 12px 14px; border-radius: 8px; }
+  .progress strong { display: block; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { display: inline-block; font-size: .8125rem; line-height: 1.3; padding: 3px 8px; border-radius: 6px; }
+  .tone-good { background: var(--good-bg); color: var(--good); }
+  .tone-warn { background: var(--warn-bg); color: var(--warn); }
+  .tone-bad { background: var(--bad-bg); color: var(--bad); }
+  .tone-open { background: var(--open-bg); color: var(--open); }
+  .tone-accent { background: var(--accent-soft); color: var(--accent); }
+  .tabs { display: flex; gap: 4px; flex-wrap: wrap; margin: 16px 0 12px; border-bottom: 1px solid var(--line); }
+  .tabs button { border: 0; border-bottom: 2px solid transparent; border-radius: 0; background: none; min-height: 40px; }
+  .tabs button[aria-selected=true] { border-bottom-color: var(--accent); font-weight: 600; }
+  .player { display: grid; gap: 14px; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); align-items: start; }
+  @media (max-width: 640px) { .player { grid-template-columns: minmax(0, 1fr); } }
+  video { width: 100%; max-height: 460px; border-radius: 8px; background: #000; display: block; }
+  audio { width: 100%; height: 40px; display: block; }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; }
+  .stat { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; }
+  .stat b { display: block; font-size: 1.125rem; line-height: 1.25; font-variant-numeric: tabular-nums; }
+  .line { border-top: 1px solid var(--line); padding: 14px 0; }
+  .line-head { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin-bottom: 6px; }
+  .time { font-variant-numeric: tabular-nums; font-size: .8125rem; color: var(--muted); }
+  .source { font-size: .9rem; color: var(--muted); margin-bottom: 6px; overflow-wrap: anywhere; }
+  .line textarea { font-size: 1.0625rem; }
+  .line-foot { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; margin-top: 6px; }
+  .heard { font-size: .875rem; color: var(--muted); margin-top: 6px; overflow-wrap: anywhere; }
+  .rate { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  details summary { cursor: pointer; font-size: .9rem; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Reel Dubber</h1>
+  <p class="muted tagline">One reel in several Indian languages, in the way people really talk.</p>
+  <div id="setup"></div>
+
+  <div class="layout">
+    <div>
+      <section class="panel">
+        <h2 style="margin-bottom:12px">New dub</h2>
+        <form id="form">
+          <div>
+            <label class="label" for="reel">Your reel</label>
+            <input id="reel" name="reel" type="file" accept="video/*,audio/*" required>
+            <p class="small muted" style="margin-top:4px">Up to 3 minutes. Use your own content, with no real phone numbers, IDs or recorded calls.</p>
+          </div>
+
+          <fieldset>
+            <legend>Dub into</legend>
+            <div class="choices" id="languages"></div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Voice</legend>
+            <div class="choices">
+              <label class="choice"><input type="radio" name="voice_mode" value="clone" checked><span>Cloned voice</span></label>
+              <label class="choice"><input type="radio" name="voice_mode" value="timbre"><span>Timbre voice</span></label>
+            </div>
+          </fieldset>
+
+          <div id="clone-fields" class="stack">
+            <div>
+              <label class="label" for="reference">Voice sample</label>
+              <input id="reference" name="reference" type="file" accept="audio/*">
+              <p class="small muted" style="margin-top:4px">5 to 30 seconds of clean speech.</p>
+            </div>
+            <div>
+              <label class="label" for="owner">Whose voice is this?</label>
+              <input id="owner" name="owner" type="text" autocomplete="name">
+            </div>
+            <label class="check"><input id="consent" type="checkbox"><span>This is my voice, or its owner has agreed to this clone.</span></label>
+          </div>
+
+          <div id="timbre-fields" hidden>
+            <label class="label" for="voice">Timbre v3.0 voice</label>
+            <select id="voice" name="voice"></select>
+          </div>
+
+          <fieldset>
+            <legend>Style</legend>
+            <div class="choices">
+              <label class="choice"><input type="radio" name="style" value="mixed" checked><span>Code-mixed</span></label>
+              <label class="choice"><input type="radio" name="style" value="pure"><span>Native words</span></label>
+            </div>
+            <p class="small muted" style="margin-top:4px">Code-mixed keeps everyday English words, as in Tanglish or Benglish.</p>
+          </fieldset>
+
+          <details>
+            <summary>More options</summary>
+            <div class="stack" style="margin-top:10px">
+              <div>
+                <label class="label" for="keyterms">Names or brand words to get right</label>
+                <input id="keyterms" type="text" placeholder="Comma-separated">
+              </div>
+              <div>
+                <label class="label" for="background">Original sound under the dub: <span id="background-value">8%</span></label>
+                <input id="background" type="range" min="0" max="40" value="8">
+              </div>
+              <label class="check"><input id="check" type="checkbox" checked><span>Check each line with Prisma. This uses more credits.</span></label>
+              <label class="check"><input id="label" type="checkbox" checked><span>Show “AI-dubbed” on the video.</span></label>
+            </div>
+          </details>
+
+          <p class="error" id="form-error" role="alert" hidden></p>
+          <button class="primary" id="start" type="submit" style="width:100%">Start dubbing</button>
+        </form>
+      </section>
+
+      <section class="panel" id="jobs-panel" hidden>
+        <h2>Recent dubs</h2>
+        <ul class="jobs" id="jobs"></ul>
+      </section>
+    </div>
+
+    <section class="panel" id="job">
+      <div class="empty">
+        <h2>Your dubs will appear here</h2>
+        <p class="muted small" style="margin-top:4px">Add a reel, choose languages and press Start dubbing.</p>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script>
+(function () {
+  const $ = id => document.getElementById(id);
+  const STATUS = { queued: ['open', 'Waiting'], running: ['accent', 'Working'], done: ['good', 'Finished'],
+                   stopped: ['warn', 'Stopped'], failed: ['bad', 'Failed'] };
+  const FLAGS = { rushed: ['warn', 'Rushed'], late: ['warn', 'Starts late'], check_speech: ['bad', 'Prisma heard it differently'],
+                  language: ['warn', 'Language not matched'], failed: ['bad', 'Not spoken'], silent: ['bad', 'Silent audio'] };
+  let options = null, current = null, activeLang = null, pollTimer = null, renderedKey = '';
+
+  function el(tag, props, ...children) {
+    const node = document.createElement(tag);
+    Object.entries(props || {}).forEach(([key, value]) => {
+      if (value === undefined || value === null || value === false) return;
+      if (key === 'class') node.className = value;
+      else if (key === 'text') node.textContent = value;
+      else if (key.startsWith('on')) node.addEventListener(key.slice(2), value);
+      else if (key === 'value') node.value = value;
+      else node.setAttribute(key, value === true ? '' : value);
+    });
+    children.flat().forEach(child => { if (child !== null && child !== undefined && child !== false) node.append(child); });
+    return node;
+  }
+  const chip = (tone, text) => el('span', { class: 'chip tone-' + tone, text });
+  const fileUrl = (job, path, rev) => '/api/jobs/' + job.id + '/files/' + path + (rev ? '?v=' + rev : '');
+
+  async function api(path, init) {
+    const response = await fetch(path, init);
+    if (!response.ok) {
+      let message = 'That request failed (' + response.status + ').';
+      try { const body = await response.json(); if (typeof body.detail === 'string') message = body.detail; } catch (e) {}
+      throw new Error(message);
+    }
+    return response.json();
+  }
+  const postJson = (path, body) => api(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body || {}) });
+
+  /* ---------- setup ---------- */
+
+  function renderSetup() {
+    const notes = [];
+    if (!options.gnani_ready) notes.push('Add GNANI_API_KEY to the .env file, then restart the app. Dubbing needs it.');
+    if (!options.rewrite_models.length) notes.push('Add GEMINI_API_KEY or EVON_BASE_URL to the .env file, then restart. Rewriting lines needs a language model.');
+    const box = $('setup');
+    box.replaceChildren(...notes.map(text => el('p', { class: 'notice tone-warn', text })));
+  }
+
+  function renderForm() {
+    $('languages').replaceChildren(...options.languages.map(lang =>
+      el('label', { class: 'choice' },
+        el('input', { type: 'checkbox', name: 'languages', value: lang.id, checked: ['ta', 'bn', 'te'].includes(lang.id) }),
+        el('span', { text: lang.name }))));
+    $('voice').replaceChildren(...options.voices.map(voice =>
+      el('option', { value: voice.name, text: voice.name + ' (' + voice.gender + ')' })));
+    $('voice').value = 'Shivani';
+    document.querySelectorAll('input[name=voice_mode]').forEach(input => input.addEventListener('change', () => {
+      const clone = document.querySelector('input[name=voice_mode]:checked').value === 'clone';
+      $('clone-fields').hidden = !clone;
+      $('timbre-fields').hidden = clone;
+    }));
+    $('background').addEventListener('input', event => { $('background-value').textContent = event.target.value + '%'; });
+  }
+
+  $('form').addEventListener('submit', async event => {
+    event.preventDefault();
+    const error = $('form-error');
+    error.hidden = true;
+    const languages = [...document.querySelectorAll('input[name=languages]:checked')].map(i => i.value);
+    const mode = document.querySelector('input[name=voice_mode]:checked').value;
+    const show = message => { error.textContent = message; error.hidden = false; };
+    if (!languages.length) return show('Choose at least one language.');
+    if (mode === 'clone') {
+      if (!$('reference').files.length) return show('Add a voice sample of 5 to 30 seconds, or choose a Timbre voice.');
+      if (!$('owner').value.trim()) return show('Enter whose voice this is.');
+      if (!$('consent').checked) return show('Confirm the voice owner has agreed to this clone.');
+    }
+    const data = new FormData();
+    data.append('reel', $('reel').files[0]);
+    if (mode === 'clone') data.append('reference', $('reference').files[0]);
+    data.append('languages', languages.join(','));
+    data.append('voice_mode', mode);
+    data.append('voice', $('voice').value);
+    data.append('style', document.querySelector('input[name=style]:checked').value);
+    data.append('background', String(Number($('background').value) / 100));
+    data.append('check', $('check').checked);
+    data.append('label', $('label').checked);
+    data.append('owner', $('owner').value);
+    data.append('consent', $('consent').checked);
+    data.append('keyterms', $('keyterms').value);
+    const start = $('start');
+    start.disabled = true;
+    start.textContent = 'Uploading…';
+    try {
+      const job = await api('/api/jobs', { method: 'POST', body: data });
+      activeLang = null;
+      openJob(job.id);
+      loadJobs();
+    } catch (problem) {
+      show(problem.message);
+    } finally {
+      start.disabled = false;
+      start.textContent = 'Start dubbing';
+    }
+  });
+
+  /* ---------- job list ---------- */
+
+  async function loadJobs() {
+    const jobs = await api('/api/jobs');
+    $('jobs-panel').hidden = !jobs.length;
+    $('jobs').replaceChildren(...jobs.map(job => {
+      const shown = STATUS[job.status] || ['open', job.status];
+      return el('li', {}, el('button', { type: 'button', class: job.id === current ? 'current' : '', onclick: () => { activeLang = null; openJob(job.id); } },
+        el('span', { class: 'name', text: job.source_name }), chip(shown[0], shown[1])));
+    }));
+    return jobs;
+  }
+
+  /* ---------- one job ---------- */
+
+  async function openJob(id) {
+    current = id;
+    renderedKey = '';
+    clearTimeout(pollTimer);
+    try { history.replaceState(null, '', '#' + id); } catch (e) {}
+    poll();
+  }
+
+  async function poll() {
+    if (!current) return;
+    const id = current;
+    let job;
+    try { job = await api('/api/jobs/' + id); }
+    catch (problem) {
+      $('job').replaceChildren(el('p', { class: 'error', text: problem.message }));
+      return;
+    }
+    if (id !== current) return;
+    renderJob(job);
+    const busy = job.status === 'queued' || job.status === 'running';
+    if (busy) pollTimer = setTimeout(poll, 1500);
+    else loadJobs();
+  }
+
+  function renderJob(job) {
+    // Rebuild only when results change, so playing videos and open text boxes survive polling.
+    const key = JSON.stringify([job.status, activeLang, job.montage && job.montage.rev, job.error, job.warnings,
+      Object.entries(job.languages).map(([lang, state]) => [lang, state.status, state.output_rev, state.error, state.rating])]);
+    const progress = $('job').querySelector('[data-progress]');
+    if (key === renderedKey && progress) {
+      progress.textContent = job.stage;
+      updateUsage(job);
+      return;
+    }
+    renderedKey = key;
+    const busy = job.status === 'queued' || job.status === 'running';
+    const shown = STATUS[job.status] || ['open', job.status];
+    const names = Object.fromEntries(options.languages.map(l => [l.id, l]));
+    const parts = [];
+
+    parts.push(el('div', { class: 'job-head' },
+      el('h2', { text: job.source_name }),
+      el('div', { class: 'chips' }, chip(shown[0], shown[1]))));
+
+    if (busy) {
+      parts.push(el('div', { class: 'progress tone-accent', role: 'status' },
+        el('strong', { 'data-progress': true, text: job.stage }),
+        el('button', { type: 'button', style: 'margin-top:8px', text: 'Stop', onclick: async event => {
+          event.target.disabled = true;
+          event.target.textContent = 'Stopping…';
+          await postJson('/api/jobs/' + job.id + '/cancel');
+        } })));
+    } else if (job.status === 'stopped' || job.status === 'failed') {
+      parts.push(el('div', { class: 'progress ' + (job.status === 'failed' ? 'tone-bad' : 'tone-warn') },
+        el('strong', { text: job.error || job.stage }),
+        el('button', { type: 'button', style: 'margin-top:8px', text: 'Resume', onclick: async () => {
+          await postJson('/api/jobs/' + job.id + '/resume');
+          renderedKey = '';
+          poll();
+        } })));
+    } else if (job.error) {
+      parts.push(el('p', { class: 'notice tone-bad', text: job.error }));
+    }
+    job.warnings.forEach(text => parts.push(el('p', { class: 'notice tone-warn', text })));
+
+    parts.push(el('p', { class: 'small muted', style: 'margin-top:12px', 'data-usage': true, text: usageText(job) }));
+
+    const langs = Object.keys(job.languages);
+    if (langs.length) {
+      if (!activeLang || !job.languages[activeLang]) activeLang = langs.find(l => job.languages[l].status === 'done') || langs[0];
+      parts.push(el('div', { class: 'tabs', role: 'tablist' }, langs.map(lang => {
+        const state = job.languages[lang];
+        const label = names[lang].name + (state.status === 'done' ? '' : state.status === 'failed' ? ' (failed)' : ' …');
+        return el('button', { type: 'button', role: 'tab', 'aria-selected': String(lang === activeLang), text: label,
+          onclick: () => { activeLang = lang; renderedKey = ''; renderJob(job); } });
+      })));
+      parts.push(renderLanguage(job, activeLang, names[activeLang], busy));
+    }
+
+    if (langs.some(l => job.languages[l].status === 'done')) parts.push(renderTools(job, names, busy));
+    $('job').replaceChildren(...parts);
+  }
+
+  function usageText(job) {
+    const u = job.usage;
+    return 'API use for this dub: ' + u.tts_requests + ' speech requests (' + u.tts_chars.toLocaleString() + ' characters), ' +
+      u.stt_requests + ' transcription checks, ' + u.batch_jobs + ' batch job' + (u.batch_jobs === 1 ? '' : 's') + '.';
+  }
+  function updateUsage(job) {
+    const node = $('job').querySelector('[data-usage]');
+    if (node) node.textContent = usageText(job);
+  }
+
+  function renderLanguage(job, lang, meta, busy) {
+    const state = job.languages[lang];
+    const box = el('div', {});
+    if (state.error) box.append(el('p', { class: 'notice tone-bad', text: state.error }));
+    if (state.status !== 'done') {
+      if (!state.error) box.append(el('p', { class: 'muted small', text: state.status === 'stopped' ? 'Stopped before this language finished.' : 'This language is still being made.' }));
+      return box;
+    }
+    const url = fileUrl(job, state.output, state.output_rev);
+    const score = state.score;
+    const media = job.source.has_video
+      ? el('video', { controls: true, preload: 'metadata', playsinline: true, src: url })
+      : el('audio', { controls: true, preload: 'metadata', src: url });
+    const cer = score.mean_cer === null ? 'Off' : Math.round(score.mean_cer * 100) + '%';
+    const stats = el('div', { class: 'stats' },
+      stat(score.voiced + ' of ' + score.lines, 'lines voiced'),
+      stat(cer, 'Prisma character errors'),
+      stat(score.source_english_kept + ' of ' + score.source_english_total, 'English words kept'),
+      stat(score.mean_tempo.toFixed(2) + '×', 'mean speed-up'),
+      stat(String(score.to_review), 'lines to review'));
+    box.append(el('div', { class: 'player' },
+      el('div', {}, media, el('a', { class: 'button', style: 'margin-top:8px', href: url, download: 'dubbed-' + lang + (job.source.has_video ? '.mp4' : '.m4a'), text: 'Download' })),
+      el('div', { class: 'stack' }, stats,
+        el('p', { class: 'small muted', text: 'Rewritten by ' + state.rewrite_by + '. Spoken by ' + voiceLabel(job) + '. Checked with Prisma v3.0, which shows whether Prisma understood it, not whether it sounds good.' }),
+        renderRating(job, lang, state, meta, busy))));
+    if (state.notes && state.notes.length) {
+      box.append(el('details', { style: 'margin-top:10px' }, el('summary', { text: 'Rewrite notes' }),
+        el('ul', { class: 'small muted' }, state.notes.map(text => el('li', { text })))));
+    }
+    const lines = el('div', { style: 'margin-top:14px' }, el('h3', { style: 'margin-bottom:6px', text: 'Lines' }));
+    state.lines.forEach(item => lines.append(renderLine(job, lang, meta, item, busy)));
+    box.append(lines);
+    return box;
+  }
+
+  const stat = (value, label) => el('div', { class: 'stat' }, el('b', { text: value }), el('span', { class: 'small muted', text: label }));
+  const voiceLabel = job => job.options.voice_mode === 'clone' ? 'the cloned voice (vachana-vc-v1)' : 'Timbre v3.0 (' + job.options.voice + ')';
+
+  function renderRating(job, lang, state, meta, busy) {
+    const rate = el('div', { class: 'rate' }, el('span', { class: 'small', text: 'Native speaker rating:' }));
+    [1, 2, 3, 4, 5].forEach(value => {
+      const button = el('button', { type: 'button', disabled: busy, 'aria-pressed': String(state.rating === value), text: String(value),
+        class: state.rating === value ? 'primary' : '',
+        onclick: async () => {
+          await postJson('/api/jobs/' + job.id + '/languages/' + lang + '/rating', { rating: value, note: state.rating_note || '' });
+          renderedKey = '';
+          poll();
+        } });
+      rate.append(button);
+    });
+    return rate;
+  }
+
+  function renderLine(job, lang, meta, item, busy) {
+    const start = Number(item.start);
+    const flags = (item.flags || []).map(flag => { const f = FLAGS[flag] || ['open', flag]; return chip(f[0], f[1]); });
+    if (item.delivery_tag && item.delivery_tag !== 'none') flags.push(chip('open', 'Delivery: ' + item.delivery_tag));
+    if (item.shortened) flags.push(chip('open', 'Shortened to fit'));
+    if (item.edited) flags.push(chip('open', 'Edited'));
+    const text = el('textarea', { rows: 2, lang: meta.id, 'aria-label': 'Line ' + (item.id + 1) + ' in ' + meta.name, value: item.text });
+    const button = el('button', { type: 'button', disabled: busy, text: 'Say this again', onclick: async () => {
+      button.disabled = true;
+      button.textContent = 'Working…';
+      try {
+        await postJson('/api/jobs/' + job.id + '/languages/' + lang + '/lines/' + item.id, { text: text.value });
+        renderedKey = '';
+        poll();
+      } catch (problem) {
+        button.disabled = false;
+        button.textContent = 'Say this again';
+        alert(problem.message);
+      }
+    } });
+    const timing = item.final_s
+      ? item.final_s.toFixed(1) + ' s spoken in ' + item.slot_s.toFixed(1) + ' s' + (item.tempo > 1 ? ', ' + item.tempo.toFixed(2) + '× speed' : '')
+      : '';
+    const stt = item.stt;
+    return el('div', { class: 'line' },
+      el('div', { class: 'line-head' }, el('span', { class: 'time', text: start.toFixed(1) + ' s' }), flags),
+      el('p', { class: 'source', text: item.source_text }),
+      text,
+      el('div', { class: 'line-foot' }, el('span', { class: 'small muted', text: timing }), button),
+      item.error ? el('p', { class: 'error', text: item.error }) : null,
+      stt && stt.ok ? el('p', { class: 'heard', lang: meta.id, text: 'Prisma heard: ' + (stt.transcript || '(nothing)') }) : null,
+      stt && !stt.ok ? el('p', { class: 'heard', text: 'Prisma check failed: ' + stt.error }) : null);
+  }
+
+  function renderTools(job, names, busy) {
+    const done = Object.keys(job.languages).filter(l => job.languages[l].status === 'done');
+    const checks = done.map(lang => el('label', { class: 'choice' },
+      el('input', { type: 'checkbox', value: lang, checked: true, 'data-montage': true }), el('span', { text: names[lang].name })));
+    const seconds = el('input', { type: 'number', min: 2, max: 20, value: 6, id: 'montage-seconds', style: 'max-width:90px' });
+    const box = el('div', { style: 'margin-top:20px;border-top:1px solid var(--line);padding-top:16px', class: 'stack' },
+      el('h3', { text: 'Language montage' }),
+      el('p', { class: 'small muted', text: 'One video that changes language as it plays, starting with your original. It switches at the start of a line.' }),
+      el('div', { class: 'choices' }, checks),
+      el('div', { class: 'rate' }, el('label', { class: 'small', for: 'montage-seconds', text: 'Seconds per language' }), seconds,
+        el('button', { type: 'button', class: 'primary', disabled: busy, text: job.montage ? 'Build it again' : 'Build montage', onclick: async event => {
+          const languages = [...$('job').querySelectorAll('input[data-montage]:checked')].map(i => i.value);
+          if (!languages.length) return;
+          event.target.disabled = true;
+          await postJson('/api/jobs/' + job.id + '/montage', { languages, seconds: Number(seconds.value) || 6 });
+          renderedKey = '';
+          poll();
+        } })));
+    if (job.montage) {
+      const url = fileUrl(job, job.montage.output, job.montage.rev);
+      box.append(job.source.has_video
+        ? el('video', { controls: true, preload: 'metadata', playsinline: true, src: url, style: 'max-width:300px' })
+        : el('audio', { controls: true, preload: 'metadata', src: url }));
+      box.append(el('a', { class: 'button', href: url, download: 'montage' + (job.source.has_video ? '.mp4' : '.m4a'), text: 'Download montage' }));
+    }
+    box.append(el('a', { class: 'button', href: '/api/jobs/' + job.id + '/scorecard.md', download: 'scorecard.md', text: 'Download scorecard' }));
+    return box;
+  }
+
+  /* ---------- start ---------- */
+
+  (async function start() {
+    options = await api('/api/options');
+    renderSetup();
+    renderForm();
+    const jobs = await loadJobs();
+    const wanted = location.hash.slice(1);
+    if (wanted && jobs.some(job => job.id === wanted)) openJob(wanted);
+  })();
+})();
+</script>
+</body>
+</html>
