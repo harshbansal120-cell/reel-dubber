@@ -5,6 +5,7 @@ this step goes through whichever model is configured. Each result records which
 model wrote it, so the app never hides that.
 """
 
+import base64
 import re
 import time
 
@@ -64,6 +65,31 @@ class Gemini:
         text = "".join(part.get("text", "") for part in parts)
         if not text:
             raise LlmError(f"Gemini returned an empty answer ({candidates[0].get('finishReason')}).")
+        return text
+
+    def analyze_audio(self, audio, mime, prompt):
+        """Ask Gemini to inspect the original delivery, not just its transcript."""
+        body = _post(
+            f"{self.base_url}/v1beta/models/{self.model}:generateContent",
+            {"x-goog-api-key": self.key},
+            {
+                "contents": [{"role": "user", "parts": [
+                    {"text": prompt},
+                    {"inlineData": {"mimeType": mime, "data": base64.b64encode(audio).decode("ascii")}},
+                ]}],
+                "generationConfig": {
+                    "responseMimeType": "application/json",
+                    "temperature": 0.1,
+                    "maxOutputTokens": 4096,
+                },
+            },
+            "Gemini audio analysis",
+        )
+        candidates = body.get("candidates") or []
+        parts = (candidates[0].get("content") or {}).get("parts") or [] if candidates else []
+        text = "".join(part.get("text", "") for part in parts).strip()
+        if not text:
+            raise LlmError("Gemini returned no audio analysis.")
         return text
 
 

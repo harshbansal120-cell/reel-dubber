@@ -63,9 +63,23 @@ def probe(path):
     }
 
 
-def extract_speech(source, target):
-    """A small mono MP3 for batch transcription, well under the 10 MB upload limit."""
-    _ffmpeg("-i", source, "-vn", "-ac", 1, "-ar", 16000, "-c:a", "libmp3lame", "-b:a", "64k", target)
+def extract_speech(source, target, cleanup="auto"):
+    """Prepare a compact ASR copy; the original track is kept for mixing/playback.
+
+    Auto applies gentle level control and removes inaudible rumble/hiss. The
+    stronger presets are opt-in because aggressive denoising can erase speech.
+    All filters preserve timestamps.
+    """
+    filters = {
+        # dynaudnorm's Gaussian filter size (g) must be odd.
+        "auto": "highpass=f=70,lowpass=f=7800,dynaudnorm=f=150:g=13:p=0.9",
+        "noisy": "highpass=f=90,lowpass=f=7600,afftdn=nr=10:nf=-40:tn=1,dynaudnorm=f=150:g=13:p=0.9",
+        "phone": "highpass=f=140,lowpass=f=3900,afftdn=nr=8:nf=-42:tn=1,dynaudnorm=f=150:g=13:p=0.9",
+    }
+    if cleanup not in filters:
+        cleanup = "auto"
+    _ffmpeg("-i", source, "-vn", "-af", filters[cleanup], "-ac", 1, "-ar", 16000,
+            "-c:a", "libmp3lame", "-b:a", "64k", target)
 
 
 def extract_voice_track(source, target):
@@ -200,7 +214,8 @@ def mux(source, voice, target, has_video, background, labels, duration_s):
     if background > 0:
         audio = (
             f"[0:a]volume={background:.3f}[bed];[1:a]aresample=48000[voice];"
-            "[bed][voice]amix=inputs=2:normalize=0:duration=longest[a]"
+            # The bundled FFmpeg build predates amix's normalize option.
+            "[bed][voice]amix=inputs=2:duration=longest[a]"
         )
     else:
         audio = "[1:a]aresample=48000[a]"
@@ -210,6 +225,13 @@ def mux(source, voice, target, has_video, background, labels, duration_s):
         _ffmpeg(*base, "-filter_complex", audio, *finish)
         return False
     picture = _labels_filter(labels) if labels else None
+    labels_drawn = picture is not None
+    source_duration = probe(source)["duration_s"]
+    tail_s = max(0.0, duration_s - source_duration)
+    if tail_s > 0:
+        if picture is None:
+            picture = "scale=trunc(iw/2)*2:trunc(ih/2)*2"
+        picture += f",tpad=stop_mode=clone:stop_duration={tail_s:.3f}"
     if picture:
         try:
             _ffmpeg(
@@ -219,7 +241,18 @@ def mux(source, voice, target, has_video, background, labels, duration_s):
                 "-c:v", "libx264", "-preset", "veryfast", "-crf", 20, "-pix_fmt", "yuv420p",
                 *finish,
             )
-            return True
+            return labels_drawn
+        except MediaError:
+            pass
+    if tail_s > 0:
+        try:
+            _ffmpeg(
+                *base,
+                "-filter_complex", f"{audio};[0:v]scale=trunc(iw/2)*2:trunc(ih/2)*2,tpad=stop_mode=clone:stop_duration={tail_s:.3f}[v]",
+                "-map", "[v]", "-c:v", "libx264", "-preset", "veryfast", "-crf", 20,
+                "-pix_fmt", "yuv420p", *finish,
+            )
+            return False
         except MediaError:
             pass
     _ffmpeg(*base, "-filter_complex", audio, "-map", "0:v", "-c:v", "copy", *finish)

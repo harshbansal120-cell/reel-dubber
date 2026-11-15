@@ -136,12 +136,16 @@ class GnaniClient:
             }
         )
 
-    def transcribe_clip(self, audio, filename, language_code, output_format, seconds):
+    def transcribe_clip(self, audio, filename, language_code, output_format, seconds, keyterms=None):
+        mime = "audio/mpeg" if filename.lower().endswith(".mp3") else "audio/wav"
+        data = {"model": STT_MODEL, "language_code": language_code, "format": output_format}
+        if keyterms:
+            data["keyterms"] = json.dumps(keyterms[:200], ensure_ascii=False)
         response = self._request(
             "POST",
             "/stt/v3",
-            files={"audio_file": (filename, audio, "audio/wav")},
-            data={"model": STT_MODEL, "language_code": language_code, "format": output_format},
+            files={"audio_file": (filename, audio, mime)},
+            data=data,
         )
         self.usage["stt_requests"] += 1
         self.usage["stt_audio_s"] = round(self.usage["stt_audio_s"] + seconds, 2)
@@ -168,4 +172,31 @@ class GnaniClient:
     @staticmethod
     def fetch_transcript(url):
         """The transcript link is a pre-signed storage URL, so it must not get the API key."""
-        return requests.get(url, timeout=REQUEST_TIMEOUT).json()
+        # Do not include the URL in errors: it contains a temporary AWS
+        # signature. Retry transient object-store timeouts without resubmitting
+        # the already completed (and billable) batch job.
+        for attempt in range(3):
+            try:
+                response = requests.get(url, timeout=(20, 90))
+                response.raise_for_status()
+                return response.json()
+            except (requests.ConnectionError, requests.Timeout):
+                if attempt == 2:
+                    raise ApiError(
+                        0,
+                        "Prisma finished transcription, but the transcript could not be downloaded from Gnani's result storage. "
+                        "Check that outbound HTTPS to gnaniasraudios.s3.amazonaws.com is allowed, then press Resume. "
+                        "Resume reuses the completed batch instead of submitting transcription again.",
+                    ) from None
+                time.sleep(attempt + 1)
+            except requests.HTTPError as error:
+                status = error.response.status_code if error.response is not None else 0
+                if status in (401, 403, 404):
+                    raise ApiError(
+                        status,
+                        "The transcript download link expired or was rejected. Press Resume to request a fresh result link; "
+                        "the completed transcription batch will be reused.",
+                    ) from None
+                raise ApiError(status, "Gnani returned an error while downloading the completed transcript.") from None
+            except ValueError:
+                raise ApiError(0, "Gnani's transcript download was not valid JSON. Press Resume to fetch it again.") from None
