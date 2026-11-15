@@ -154,6 +154,10 @@ def create_app(settings=None):
     def index():
         return FileResponse(HERE / "index.html", media_type="text/html")
 
+    @app.get("/about")
+    def about():
+        return FileResponse(HERE / "about.html", media_type="text/html")
+
     @app.get("/assets/creator-preview.gif")
     def creator_preview():
         return FileResponse(ASSETS / "Animated Studio Expressions Grid (1).gif", media_type="image/gif")

@@ -48,6 +48,7 @@
   .small { font-size: .86rem; }
   .eyebrow { color: var(--accent-strong); font-size: .69rem; font-weight: 800; letter-spacing: .13em; }
   .app-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 4px 0 18px; border-bottom: 1px solid var(--line); }
+  .header-actions { display: flex; align-items: center; gap: 10px; }
   .brand { display: inline-flex; align-items: center; gap: 11px; color: var(--ink); text-decoration: none; }
   .brand-mark { display: flex; align-items: end; justify-content: center; gap: 3px; width: 40px; height: 40px; padding: 10px; border-radius: 14px; background: linear-gradient(145deg, #ff9b77, #ed634c); box-shadow: 0 8px 20px rgba(231, 101, 60, .3); transform: rotate(-4deg); transition: transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s; }
   .brand:hover .brand-mark { transform: rotate(5deg) scale(1.06); box-shadow: 0 11px 25px rgba(231,101,60,.38); }
@@ -293,6 +294,7 @@
     main { padding: 14px 12px 36px; }
     .line-controls { grid-template-columns: minmax(0, 1fr); }
     .app-header { padding-bottom: 13px; }
+    .header-actions { gap: 7px; }
     .local-badge { padding: 6px 8px; font-size: .68rem; }
     .hero { grid-template-columns: minmax(0, 1fr); gap: 25px; min-height: auto; margin-top: 14px; padding: 25px 22px; border-radius: 20px; }
     .hero-visual { justify-self: start; width: min(600px, 100%); }
@@ -313,6 +315,7 @@
     .empty-footer { gap: 7px; margin-top: 16px; font-size: .68rem; }
   }
   @media (max-width: 420px) {
+    .local-badge { display: none; }
     .local-badge { max-width: 145px; }
     .progress { align-items: flex-start; flex-direction: column; }
     .hero h1 { font-size: clamp(2.1rem, 10vw, 3rem); }
@@ -349,7 +352,10 @@
       <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
       <span class="brand-copy"><strong>VYOMA</strong><small>व्योम · AI-powered localization</small></span>
     </a>
-    <div class="local-badge"><span class="status-dot"></span>Your private creator workspace</div>
+    <div class="header-actions">
+      <a class="button" href="/about">Our Vision</a>
+      <div class="local-badge"><span class="status-dot"></span>Your private creator workspace</div>
+    </div>
   </header>
 
   <section class="hero">
