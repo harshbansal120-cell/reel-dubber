@@ -62,6 +62,18 @@
   .capability .index { display:block; margin-bottom:12px; color:var(--coral); font-size:.68rem; font-weight:850; letter-spacing:.13em; }
   .capability h3 { margin-bottom:7px; font-size:1.03rem; letter-spacing:-.02em; }
   .capability p { max-width:310px; margin:0; color:var(--muted); font-size:.9rem; }
+  .use-cases-heading { margin-bottom:28px; }
+  .use-cases-heading h2 { max-width:900px; }
+  .use-cases-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; }
+  .use-case { position:relative; display:grid; grid-template-columns:100px 1fr; gap:24px; min-height:250px; align-items:center; padding:28px; overflow:hidden; border:1px solid var(--line); border-radius:20px; background:linear-gradient(135deg,#fffdfd,#f3edfc); box-shadow:0 12px 30px rgba(68,48,85,.055); }
+  .use-case:nth-child(2) { background:linear-gradient(135deg,#fffdfd,#f7efff 60%,#fff5ec); }
+  .use-case-visual { display:grid; width:92px; height:92px; place-items:center; border:1px solid #e4d7f3; border-radius:28px; color:var(--accent-dark); background:radial-gradient(circle at 30% 25%,#fff 0 10%,transparent 11%),linear-gradient(145deg,#e8dcfa,#f9dfd8); box-shadow:0 12px 25px rgba(82,52,120,.12); transform:rotate(-5deg); }
+  .use-case:nth-child(2) .use-case-visual { color:#7155a6; background:radial-gradient(circle at 70% 28%,#fff 0 9%,transparent 10%),linear-gradient(145deg,#e5ddfb,#fff0d9); transform:rotate(4deg); }
+  .use-case-visual svg { width:51px; height:51px; }
+  .use-case .index { display:block; margin-bottom:9px; color:var(--coral); font-size:.66rem; font-weight:850; letter-spacing:.13em; }
+  .use-case h3 { margin-bottom:9px; font-family:var(--serif); font-size:1.45rem; font-weight:500; letter-spacing:-.025em; line-height:1.15; }
+  .use-case p { margin:0; color:var(--muted); font-size:.88rem; }
+  .use-case-note { margin:16px 0 0; color:var(--muted); font-size:.78rem; }
   .sovereign { position:relative; margin-inline:calc((min(1120px,100vw - 48px) - 100vw)/2); padding:72px max(24px,calc((100vw - 1120px)/2)); overflow:hidden; color:#fff8fc; background:radial-gradient(ellipse at 90% 15%,rgba(255,193,122,.18),transparent 30%),linear-gradient(118deg,#302044,#45295e 57%,#653b72); }
   .sovereign .section-kicker { color:#ffd18e; }
   .sovereign h2 { max-width:760px; }
@@ -98,8 +110,8 @@
   .final-cta p { max-width:610px; margin:0; color:var(--muted); }
   .site-footer { display:flex; justify-content:space-between; gap:20px; padding:20px 0 28px; border-top:1px solid var(--line); color:var(--muted); font-size:.8rem; }
   .site-footer strong { color:var(--ink); }
-  @media(max-width:850px) { .hero { grid-template-columns:1fr; gap:15px; padding:48px 42px; }.story-visual { min-height:290px; }.problem,.vision { grid-template-columns:1fr; gap:20px; }.solution-heading,.roadmap-heading { display:block; }.solution-heading .lead,.roadmap-heading .lead { max-width:650px; margin-top:14px; }.roadmap-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }.sovereign { margin-inline:-24px; padding-inline:32px; } }
-  @media(max-width:620px) { .wrap { width:min(100% - 30px,1120px); }.site-header { min-height:68px; }.brand-copy small { font-size:.6rem; }.header-nav .nav-link:first-child { display:none; }.hero { min-height:auto; margin:16px auto 65px; padding:34px 24px 20px; border-radius:22px; }.eyebrow { font-size:.61rem; }.hero-copy>p:not(.eyebrow) { font-size:.93rem; }.hero-copy .support-line { margin:15px 0 20px; }.story-visual { min-height:255px; }.orbit-map { width:min(365px,100%); }.source-card { width:122px; min-height:100px; }.language-chip { min-width:70px; min-height:36px; padding:6px 9px; font-size:.76rem; }.chip-3 { right:0; }.chip-6 { left:0; }.section { margin-bottom:68px; }.capabilities { grid-template-columns:1fr 1fr; column-gap:20px; row-gap:22px; }.sovereign { margin-inline:-15px; padding:52px 22px; }.tech-grid { grid-template-columns:1fr; }.tech-item { min-height:0; padding:19px 0; }.tech-item+.tech-item { padding-left:0; border-top:1px solid rgba(255,255,255,.2); border-left:0; }.priorities,.roadmap-grid { grid-template-columns:1fr; }.roadmap-card { min-height:0; padding:19px; }.final-cta { display:block; margin-bottom:44px; padding:28px 24px; }.final-cta .actions { margin-top:21px; }.site-footer { display:grid; gap:5px; } }
+  @media(max-width:850px) { .hero { grid-template-columns:1fr; gap:15px; padding:48px 42px; }.story-visual { min-height:290px; }.problem,.vision { grid-template-columns:1fr; gap:20px; }.solution-heading,.roadmap-heading { display:block; }.solution-heading .lead,.roadmap-heading .lead { max-width:650px; margin-top:14px; }.roadmap-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }.use-cases-grid { grid-template-columns:1fr; }.sovereign { margin-inline:-24px; padding-inline:32px; } }
+  @media(max-width:620px) { .wrap { width:min(100% - 30px,1120px); }.site-header { min-height:68px; }.brand-copy small { font-size:.6rem; }.header-nav .nav-link:first-child { display:none; }.hero { min-height:auto; margin:16px auto 65px; padding:34px 24px 20px; border-radius:22px; }.eyebrow { font-size:.61rem; }.hero-copy>p:not(.eyebrow) { font-size:.93rem; }.hero-copy .support-line { margin:15px 0 20px; }.story-visual { min-height:255px; }.orbit-map { width:min(365px,100%); }.source-card { width:122px; min-height:100px; }.language-chip { min-width:70px; min-height:36px; padding:6px 9px; font-size:.76rem; }.chip-3 { right:0; }.chip-6 { left:0; }.section { margin-bottom:68px; }.capabilities { grid-template-columns:1fr 1fr; column-gap:20px; row-gap:22px; }.use-case { grid-template-columns:1fr; gap:18px; padding:23px; }.use-case-visual { width:72px; height:72px; border-radius:23px; }.use-case-visual svg { width:42px; height:42px; }.sovereign { margin-inline:-15px; padding:52px 22px; }.tech-grid { grid-template-columns:1fr; }.tech-item { min-height:0; padding:19px 0; }.tech-item+.tech-item { padding-left:0; border-top:1px solid rgba(255,255,255,.2); border-left:0; }.priorities,.roadmap-grid { grid-template-columns:1fr; }.roadmap-card { min-height:0; padding:19px; }.final-cta { display:block; margin-bottom:44px; padding:28px 24px; }.final-cta .actions { margin-top:21px; }.site-footer { display:grid; gap:5px; } }
   @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } *,*::before,*::after { animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; } }
 </style>
 </head>
@@ -141,6 +153,21 @@
       <article class="capability"><span class="index">05 / REMEMBER</span><h3>Creator Kits</h3><p>Reuse saved style profiles, pronunciation dictionaries, and audience personas.</p></article>
       <article class="capability"><span class="index">06 / EXTEND</span><h3>Beyond dubbing</h3><p>Create audience-specific versions and draft spoken replies to comments.</p></article>
     </div>
+  </section>
+
+  <section class="section wrap" aria-labelledby="use-cases-title">
+    <div class="use-cases-heading"><p class="section-kicker">A wider possibility</p><h2 id="use-cases-title">What if language was never a barrier to sharing an idea?</h2></div>
+    <div class="use-cases-grid">
+      <article class="use-case">
+        <div class="use-case-visual" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none"><path d="M13 17.5A7.5 7.5 0 0 1 20.5 10h23A7.5 7.5 0 0 1 51 17.5v16a7.5 7.5 0 0 1-7.5 7.5H30l-11 9v-9.7a7.5 7.5 0 0 1-6-7.3v-16Z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><path d="M27 19v13l11-6.5L27 19Z" fill="currentColor"/><path d="M18 55c5-3 9-3 14 0m7 0c5-3 9-3 14 0" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+        <div><span class="index">01 / STORYTELLING</span><h3>Creator storytelling across languages</h3><p>Imagine a creator recording a suspenseful story in Hindi, or an Indian history creator bringing historical figures to life through storytelling, reaching audiences across India while preserving their voice, dramatic pauses and emotions — and adapting each story to its language and cultural context.</p></div>
+      </article>
+      <article class="use-case">
+        <div class="use-case-visual" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none"><path d="M8 45 23 25l9 12 7-9 17 17H8Z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><circle cx="45" cy="17" r="6" stroke="currentColor" stroke-width="2.5"/><path d="M12 54h40M16 12v6m-7-3h6m31 30v7m-4-3h8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+        <div><span class="index">02 / ACCESSIBILITY</span><h3>Accessibility through voice</h3><p>Imagine a visually impaired person experiencing the colours of a sunset, the beauty of a mountain landscape or the details of a painting through vivid descriptions in their mother tongue. Or accessing documents, public announcements and educational content through natural speech.</p></div>
+      </article>
+    </div>
+    <p class="use-case-note">These are envisioned applications of VYOMA's broader vision.</p>
   </section>
 
   <section class="section sovereign" id="sovereign" aria-labelledby="sovereign-title">
