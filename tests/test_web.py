@@ -62,7 +62,7 @@ def wait_for(client, job_id, timeout=120):
 
 
 def test_page_and_options_load_without_revealing_keys(client):
-    assert "Reel Dubber" in client.get("/").text
+    assert "VYOMA — AI-Powered Content Localization" in client.get("/").text
     body = client.get("/api/options")
     assert body.json()["gnani_ready"] is True
     assert body.json()["rewrite_models"] == ["Gemini (gemini-test)"]

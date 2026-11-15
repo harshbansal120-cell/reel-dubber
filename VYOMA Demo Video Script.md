@@ -1,15 +1,15 @@
-# ReelDub Demo Video Script
+# VYOMA Demo Video Script
 
 **Target length:** 7–9 minutes  
 **Before recording:** Use a short, consented clip with some background noise, and have a completed dub ready in the workspace. Keep the clip under three minutes. Use your own pronunciation examples and read stats directly from the finished job; don’t fill in the placeholders with estimates.
 
 ## 0:00–0:25 — Opening
 
-**On screen:** Show the ReelDub banner, then the Create a dub page.
+**On screen:** Show the VYOMA banner, then the Create a dub page.
 
 **Narration:**
 
-> “Creators shouldn’t have to remake a video every time they want to reach a new language audience. ReelDub helps turn one short video into localized versions, with control over language style, pronunciation, voice, and timing.
+> “Introducing VYOMA: AI-powered content localization. One voice. Limitless reach. Powered by sovereign Indian AI capabilities. Creators shouldn’t have to remake a video every time they want to reach a new language audience. VYOMA helps turn one short video into localized versions, with control over language style, pronunciation, voice, and timing.
 >
 > In this demo, I’ll take a noisy reel through the workflow, review the dub, make a correction, and show the creator tools built around it.”
 
@@ -19,7 +19,7 @@
 
 **Narration:**
 
-> “I’ll start with a short creator clip. ReelDub accepts audio or video up to three minutes. I’ll choose the target languages here. The app supports ten options: Hindi, Tamil, Bengali, Telugu, Kannada, Malayalam, Marathi, Gujarati, Punjabi, and English.
+> “I’ll start with a short creator clip. VYOMA accepts audio or video up to three minutes. I’ll choose the target languages here. The app supports ten options: Hindi, Tamil, Bengali, Telugu, Kannada, Malayalam, Marathi, Gujarati, Punjabi, and English.
 >
 > For this example, I’ll choose Tamil and Bengali so we can compare two regional versions.”
 
@@ -29,7 +29,7 @@
 
 **Narration:**
 
-> “This source has some background noise, so I’m selecting the stronger Noisy room cleanup profile. ReelDub also has Auto for ordinary recordings and Phone or VoIP for narrow-band speech.
+> “This source has some background noise, so I’m selecting the stronger Noisy room cleanup profile. VYOMA also has Auto for ordinary recordings and Phone or VoIP for narrow-band speech.
 >
 > Cleanup is applied to the transcription copy to help the speech recognizer. The original soundtrack remains in the finished video, so this setting does not remove noise from the final audio bed. I’ll review the transcript carefully, especially names and quiet words, because noise reduction can soften them.”
 
@@ -51,7 +51,7 @@
 
 **Narration:**
 
-> “I’ll start the job. ReelDub transcribes the speech with timings and speaker labels, rewrites the lines for the selected audience and language, generates speech, and fits the lines back onto the video.
+> “I’ll start the job. VYOMA transcribes the speech with timings and speaker labels, rewrites the lines for the selected audience and language, generates speech, and fits the lines back onto the video.
 >
 > The timing step tries to avoid cutting off a sentence or forcing every line to play too fast. If a line still needs review, the result will flag it.”
 
@@ -83,7 +83,7 @@
 
 > “Voice Director lets me speak an editing instruction instead of typing it. I’ll ask it to shorten this line and keep ‘AI tool’ in English.
 >
-> Prisma transcribes my instruction, the configured rewrite model edits the selected line, and ReelDub generates that line again. This applies to the selected line, and it uses additional model and speech requests.”
+> Prisma transcribes my instruction, the configured rewrite model edits the selected line, and VYOMA generates that line again. This applies to the selected line, and it uses additional model and speech requests.”
 
 ## 4:40–5:15 — Creator profile and pronunciation dictionary
 
@@ -115,7 +115,7 @@
 
 > “Comment-to-reel turns a viewer question into a response draft using the source transcript as context. I choose the response language, review the draft, and can edit it before generating speech.
 >
-> The response should only use facts supported by the video. I review it for accuracy before approval. Once approved, ReelDub creates a response clip from the source video; it does not post to a social account.”
+> The response should only use facts supported by the video. I review it for accuracy before approval. Once approved, VYOMA creates a response clip from the source video; it does not post to a social account.”
 
 ## 6:25–6:55 — Montage, exports, and performance tracking
 
@@ -125,7 +125,7 @@
 
 > “The montage tool creates one showcase that switches between the original and selected language versions. I can download the finished video and synchronized subtitle file.
 >
-> ReelDub also lets me enter views, likes, comments, shares, and saves manually to compare engagement across versions. These are numbers I provide; the app does not connect to social platforms or retrieve analytics automatically.”
+> VYOMA also lets me enter views, likes, comments, shares, and saves manually to compare engagement across versions. These are numbers I provide; the app does not connect to social platforms or retrieve analytics automatically.”
 
 ## 6:55–7:30 — Why this product is different
 
@@ -133,9 +133,9 @@
 
 **Narration:**
 
-> “ReelDub is designed around a specific creator workflow: Indian regional languages, everyday code-mixing, reusable creator preferences, and line-level review.
+> “VYOMA is designed around a specific creator workflow: Indian regional languages, everyday code-mixing, reusable creator preferences, and line-level review.
 >
-> It isn’t accurate to claim that ReelDub is better than every existing dubbing platform. Some competitors emphasize lip sync and broad language coverage; others offer detailed editing timelines and export options. ReelDub’s current focus is the combination of code-mixed Indian language guidance, per-line creator control, local preference tools, noisy-input transcription options, and a reviewable dubbing workflow.
+> It isn’t accurate to claim that VYOMA is better than every existing dubbing platform. Some competitors emphasize lip sync and broad language coverage; others offer detailed editing timelines and export options. VYOMA’s current focus is the combination of code-mixed Indian language guidance, per-line creator control, local preference tools, noisy-input transcription options, and a reviewable dubbing workflow.
 >
 > This version does not include lip sync. It is a focused prototype for testing how creators can adapt short-form content and retain control over the result.”
 
@@ -147,7 +147,7 @@
 
 > “The speech workflow uses Gnani Prisma for transcription and Timbre or voice cloning for generated speech. The rewrite provider is configurable. Evon support is implemented, but this demo uses whichever provider is actually configured for the run; the job records that provider.
 >
-> ReelDub is built to make one creator’s message travel across languages while keeping the editing process visible and reviewable. Thanks for watching.”
+> VYOMA is built to make one creator’s message travel across languages while keeping the editing process visible and reviewable. Thanks for watching.”
 
 ## On-screen stats to fill from your actual demo job
 
@@ -162,4 +162,4 @@ Use values visible in the app or its scorecard:
 
 Avoid calling these accuracy or quality benchmarks. One demo run is not enough to support a general performance claim.
 
-For competitor context, HeyGen currently promotes video translation with lip sync and broad language/dialect coverage ([HeyGen](https://www.heygen.com/)); ElevenLabs documents transcript editing, timeline controls, and export options in Dubbing Studio ([ElevenLabs documentation](https://elevenlabs.io/docs/eleven-creative/products/dubbing/dubbing-studio)). These examples support positioning ReelDub as **focused differently**, not claiming it outperforms them overall.
+For competitor context, HeyGen currently promotes video translation with lip sync and broad language/dialect coverage ([HeyGen](https://www.heygen.com/)); ElevenLabs documents transcript editing, timeline controls, and export options in Dubbing Studio ([ElevenLabs documentation](https://elevenlabs.io/docs/eleven-creative/products/dubbing/dubbing-studio)). These examples support positioning VYOMA as **focused differently**, not claiming it outperforms them overall.

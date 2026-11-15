@@ -1,6 +1,14 @@
-# Reel Dubber
+# VYOMA
 
-Dubs a short video into Indian languages in the creator's own voice, keeping the language mix natural. A Hinglish reel becomes Tanglish or Benglish, not textbook Tamil or Bengali. Built for Gnani AI's Great Indian AI Internship Challenge.
+## व्योम
+
+**AI-POWERED CONTENT LOCALIZATION**
+
+### One voice. Limitless reach.
+
+Powered by sovereign Indian AI capabilities. VYOMA localizes short videos for Indian language audiences while keeping everyday code-mixing natural. A Hinglish clip can become Tanglish or Benglish, not textbook Tamil or Bengali.
+
+Built for Gnani AI's Great Indian AI Internship Challenge. The current configured stack uses Gnani for transcription and speech, and Google Gemini for rewriting and semantic review.
 
 ## What each part does
 
@@ -50,7 +58,7 @@ Gemini is the active rewrite provider in the current setup. The code also includ
 6. Download the synchronized `.srt` captions beside each language video. In transcript review, preview any line, adjust its delivery and speed, or enter a phonetic speech spelling while keeping the caption text unchanged.
 7. Record views, likes, comments, shares and saves for each published version. The workspace compares engagement rates from the numbers you enter.
 8. Set the CodeMix level from mostly native wording to a stronger English mix. It guides the rewrite model; it is not an exact word-count target.
-9. In **Transcript & review**, choose a line and record a short Voice Director instruction. Prisma transcribes it, the configured language model edits only that selected line, and ReelDub regenerates that line.
+9. In **Transcript & review**, choose a line and record a short Voice Director instruction. Prisma transcribes it, the configured language model edits only that selected line, and VYOMA regenerates that line.
 10. DubBack checks each generated line with Prisma, shows the expected and recognized text, and flags lines for listening review. It cannot verify meaning or naturalness on its own.
 
 ### Reusable creator tools
@@ -98,8 +106,8 @@ Rewrites also preserve the speaker's intent and adapt clear idioms, jokes, and c
 - **Voice Director scope.** Spoken directions apply to one selected line at a time. Each direction uses a Prisma request, a rewrite-model call and a new speech generation for that line.
 - **DubBack limits.** Prisma recognition is a useful pronunciation signal, not a semantic or native-speaker quality guarantee. Listen closely to names and numbers.
 - **Emotion on cloned voices.** Gemini can analyze source delivery, but the current cloned-voice endpoint does not accept Timbre's delivery tags. Use a Timbre voice to apply those tags.
-- **Social performance data.** Views and engagement metrics are entered manually; Reel Dubber does not connect to Instagram, TikTok, or YouTube accounts.
-- **Original soundtrack control.** The final mix can retain the source soundtrack under the dub at 8% by default, or mute the entire source track. This can be changed after dubbing and rebuilding the export does not repeat transcription or speech generation. Reel Dubber does not yet separate background noise, music, and original speech into independent tracks. Noise cleanup improves the transcription copy only; it does not denoise the final source soundtrack.
+- **Social performance data.** Views and engagement metrics are entered manually; VYOMA does not connect to Instagram, TikTok, or YouTube accounts.
+- **Original soundtrack control.** The final mix can retain the source soundtrack under the dub at 8% by default, or mute the entire source track. This can be changed after dubbing and rebuilding the export does not repeat transcription or speech generation. VYOMA does not yet separate background noise, music, and original speech into independent tracks. Noise cleanup improves the transcription copy only; it does not denoise the final source soundtrack.
 - **Speaker voices.** Timbre mode can assign distinct same-gender stock voices to detected speakers, reusing voices if there are more speakers than available matching voices. Voice cloning still uses one cloned voice for all speakers because the form accepts one voice sample.
 - **Cloning across languages is unproven.** Gnani's docs don't say whether a cloned voice can speak other languages. Try one language first, and use a Timbre voice if it fails.
 - **Local only.** It runs on one computer, one job at a time.

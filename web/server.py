@@ -95,7 +95,7 @@ class FinalAudioMixRequest(BaseModel):
 def create_app(settings=None):
     settings = settings or load_settings()
     settings.runs_dir.mkdir(parents=True, exist_ok=True)
-    app = FastAPI(title="Reel Dubber")
+    app = FastAPI(title="VYOMA")
     workers = ThreadPoolExecutor(max_workers=1)
 
     def creator_kit_path():

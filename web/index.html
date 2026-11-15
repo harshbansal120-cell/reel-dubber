@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Reel Dubber</title>
+<title>VYOMA — AI-Powered Content Localization</title>
 <style>
   :root {
     color-scheme: light;
@@ -345,19 +345,19 @@
 <body>
 <main>
   <header class="app-header">
-    <a class="brand" href="/" aria-label="ReelDub home">
+    <a class="brand" href="/" aria-label="VYOMA home">
       <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
-      <span class="brand-copy"><strong>ReelDub</strong><small>A dubbing studio for creators</small></span>
+      <span class="brand-copy"><strong>VYOMA</strong><small>व्योम · AI-powered localization</small></span>
     </a>
     <div class="local-badge"><span class="status-dot"></span>Your private creator workspace</div>
   </header>
 
   <section class="hero">
     <div class="hero-copy">
-      <p class="eyebrow">THE CREATOR'S DUBBING STUDIO</p>
-      <h1>One reel.<br><span>Every language.</span></h1>
-      <p class="tagline">Translate your reel into Indian languages with a cloned creator voice or a studio voice. Keep everyday code-mixing, with each line fitted to the original timing.</p>
-      <div class="hero-tags"><span>9 Indian languages</span><span>Clone or studio voice</span><span>Timed to the reel</span></div>
+      <p class="eyebrow">AI-POWERED CONTENT LOCALIZATION</p>
+      <h1>One voice.<br><span>Limitless reach.</span></h1>
+      <p class="tagline">Powered by sovereign Indian AI capabilities. Localize creator videos for Indian audiences with natural code-mixing, voice options, and line-by-line timing control.</p>
+      <div class="hero-tags"><span>10 target languages</span><span>Clone or studio voice</span><span>Timed to the video</span></div>
     </div>
     <div class="hero-visual" aria-hidden="true">
       <div class="product-map">
@@ -488,7 +488,6 @@
               <div>
                 <label class="label" for="background">Original soundtrack level: <span id="background-value">8%</span></label>
                 <input id="background" type="range" min="0" max="40" value="8">
-                <p class="helper">Turn this off to mute the entire original soundtrack. ReelDub does not yet separate background noise from music or speech.</p>
               </div>
               <label class="check"><input id="check" type="checkbox" checked><span>Check each line with Prisma. This uses more credits.</span></label>
               <label class="check"><input id="semantic-check" type="checkbox" checked><span>Review translation meaning and glossary consistency with the language model.</span></label>
@@ -939,7 +938,7 @@
     sourceLevel.addEventListener('input', () => { sourceLevelText.textContent = sourceLevel.value + '%'; });
     box.append(el('section', { class: 'tools-panel final-audio-mix' },
       el('h3', { text: 'Final soundtrack' }),
-      el('p', { class: 'small muted', text: 'Change this after dubbing. ReelDub rebuilds the export from the saved dub audio without repeating transcription or speech generation.' }),
+      el('p', { class: 'small muted', text: 'Change this after dubbing. VYOMA rebuilds the export from the saved dub audio without repeating transcription or speech generation.' }),
       el('label', { class: 'check' }, keepSource, el('span', { text: 'Keep the original soundtrack under this dub, including ambience, music, and remaining source speech.' })),
       el('label', { class: 'label' }, 'Original soundtrack level: ', sourceLevelText), sourceLevel,
       el('button', { type: 'button', class: 'primary', disabled: busy, text: 'Rebuild final export', onclick: async event => {
