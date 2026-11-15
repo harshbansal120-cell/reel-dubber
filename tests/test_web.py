@@ -67,6 +67,9 @@ def test_page_and_options_load_without_revealing_keys(client):
     assert about.status_code == 200
     assert "One voice." in about.text
     assert "EVON" in about.text
+    assert "Future Roadmap" in about.text
+    assert "What's Next for VYOMA?" in about.text
+    assert "Collaborative &amp; Enterprise Workspace" in about.text
     body = client.get("/api/options")
     assert body.json()["gnani_ready"] is True
     assert body.json()["rewrite_models"] == ["Gemini (gemini-test)"]
