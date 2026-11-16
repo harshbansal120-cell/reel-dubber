@@ -72,6 +72,9 @@
   .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 19px; }
   .hero-tags span { padding: 5px 10px; border: 1px solid rgba(255,255,255,.18); border-radius: 99px; color: rgba(255,248,243,.84); background: rgba(255,255,255,.07); font-size: .73rem; font-weight: 650; backdrop-filter: blur(8px); transition: transform .2s, background .2s, border-color .2s; }
   .hero-tags span:hover { transform: translateY(-3px) rotate(-1deg); border-color: rgba(255,255,255,.38); background: rgba(255,255,255,.13); }
+  .vision-cta { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 0 0 15px; padding: 12px 18px; border: 1px solid var(--line); border-radius: 14px; color: var(--muted); background: color-mix(in srgb, var(--surface) 78%, transparent); text-align: center; }
+  .vision-cta strong { color: var(--ink); }
+  .vision-cta .button { min-height: 34px; padding: 5px 11px; white-space: nowrap; }
   .hero-visual { position: relative; justify-self: end; width: min(100%, 600px); aspect-ratio: 1.68; animation: art-float 6s ease-in-out infinite; }
   .hero-visual::before { position: absolute; inset: 11% 4%; border: 1px solid rgba(255,255,255,.1); border-radius: 30px; background: radial-gradient(ellipse at 77% 49%, rgba(207,175,255,.19), transparent 46%); content: ''; transform: rotate(-4deg); }
   .product-map { position: absolute; inset: 4% 0; display: grid; grid-template-columns: minmax(140px,.75fr) 58px minmax(250px,1.35fr); align-items: center; gap: 10px; }
@@ -353,7 +356,6 @@
       <span class="brand-copy"><strong>VYOMA</strong><small>व्योम · AI-powered localization</small></span>
     </a>
     <div class="header-actions">
-      <a class="button" href="/about">Our Vision</a>
       <div class="local-badge"><span class="status-dot"></span>Your private creator workspace</div>
     </div>
   </header>
@@ -387,6 +389,10 @@
       </div>
     </div>
   </section>
+  <aside class="vision-cta" aria-label="Our pitch and vision">
+    <span><strong>Our pitch and vision:</strong> See how VYOMA helps creators reach audiences across languages.</span>
+    <a class="button" href="/about">Explore our vision</a>
+  </aside>
   <div id="setup"></div>
 
   <nav class="primary-tabs" role="tablist" aria-label="Studio sections">
